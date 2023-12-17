@@ -1,0 +1,61 @@
+includes:
+- configs/s2ef/2M/base.yml
+
+task:
+  dataset: oc22_lmdb
+  train_on_free_atoms: True
+  eval_on_free_atoms: True
+  metric: energy_mae
+
+trainer: forces
+
+dataset:
+  dataset:
+  train:
+    src: data/s2ef/2M/train/
+    normalize_labels: True
+    target_mean: -0.7554450631141663
+    target_std: 2.887317180633545
+    grad_target_mean: 0.0
+    grad_target_std: 2.887317180633545
+    train_on_oc20_total_energies: True                                         # True or False
+    oc20_ref: data/s2ef/oc20_ref.pkl
+  val:
+    src: data/s2ef/all/val_id/
+    normalize_labels: True
+    target_mean: -0.7554450631141663
+    target_std: 2.887317180633545
+    grad_target_mean: 0.0
+    grad_target_std: 2.887317180633545
+    train_on_oc20_total_energies: True                                         # True or False
+    oc20_ref: data/s2ef/oc20_ref.pkl
+
+model:
+  name: holonet
+  atom_embedding_size: 1024
+  fc_feat_size: 2048
+  num_fc_layers: 3
+  cutoff: 6.0
+  use_pbc: True
+  otf_graph: True
+  regress_forces: True
+
+# *** Important note ***
+#   The total number of gpus used for this run was 8.
+#   If the global batch size (num_gpus * batch_size) is modified
+#   the lr_milestones and warmup_steps need to be adjusted accordingly.
+
+optim:
+  batch_size: 8
+  eval_batch_size: 8
+  num_workers: 0
+  lr_initial: 0.001
+  lr_gamma: 0.1
+  lr_milestones: # steps at which lr_initial <- lr_initial * lr_gamma
+    - 156250
+    - 281250
+    - 437500
+  warmup_steps: 62500
+  warmup_factor: 0.2
+  max_epochs: 20
+  force_coefficient: 0  # 10
