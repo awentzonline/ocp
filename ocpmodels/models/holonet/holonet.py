@@ -94,7 +94,10 @@ class HoloNet(BaseModel):
         self.register_buffer(
             'z_embeddings', embedding_vectors[offset: offset + self.num_z_bins]
         )
-        self.axis_buckets = torch.arange(-max_axis_value, max_axis_value, 2 * max_axis_value / (num_axis_bins - 1))
+        self.register_buffer(
+            'axis_buckets',
+            torch.arange(-max_axis_value, max_axis_value, 2 * max_axis_value / (num_axis_bins - 1))
+        )
 
         # Spherical coordinates for edges
         # self.num_theta_bins = num_theta_bins
