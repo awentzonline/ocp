@@ -90,7 +90,7 @@ class HoloNet(BaseModel):
         self.register_buffer(
             'y_embeddings', embedding_vectors[offset: offset + self.num_y_bins]
         )
-        offset += self.num_x_bins
+        offset += self.num_y_bins
         self.register_buffer(
             'z_embeddings', embedding_vectors[offset: offset + self.num_z_bins]
         )
